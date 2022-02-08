@@ -3,13 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:github_api_client/services/github_service.dart';
 
+import '../services/github_service.dart';
+import '../services/github_service.dart';
+
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key key}) : super(key: key);
 
   GithubApiClientService apiClientService = GithubApiClientService();
+  RepoListController controlador = RepoListController();
+  GithubApiClientService prueba = GithubApiClientService();
 
   @override
-  RepoListController controlador = RepoListController();
   Widget build(BuildContext context) {
     List lista = ["Texto prueba 0", "Texto prueba 1"];
     // controlador.controller.sink.add(lista);
@@ -34,12 +38,13 @@ class HomeScreen extends StatelessWidget {
               child: StreamBuilder<List>(
                 stream: controlador.stream,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  if (true) {
                     return ListView.builder(
-                      itemCount: snapshot.data.length,
+                      itemCount: 1,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(snapshot.data[index]),
+                          title: Text(apiClientService.getRepositories()[index]),
+                          subtitle: Text(apiClientService.getLogin()[index]),
                         );
                       },
                     );
@@ -59,15 +64,17 @@ class HomeScreen extends StatelessWidget {
   Timer _debounce;
   GithubApiClientService cliente = GithubApiClientService();
   String respuesta;
-  
+  List repositorios = [];
+
   _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce.cancel();
-    _debounce = Timer(const Duration(milliseconds: 1000),  () async {
+    _debounce = Timer(const Duration(milliseconds: 1000), () {
       if (query.isNotEmpty) {
-        apiClientService.getRepositories(query);
-        cliente.getRepositories(query);
-        respuesta = await cliente.getRepositories(query);
-        controlador.test(controlador.currentState..add(cliente.getBody()));
+        apiClientService.getRepositories();
+        cliente.getRepositories();
+        if (respuesta.isNotEmpty) {
+          controlador.test(controlador.currentState..add(cliente.getBody()));
+        }
       }
     });
   }

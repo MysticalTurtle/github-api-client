@@ -1,10 +1,4 @@
-import 'dart:async';
-
-import 'package:http/http.dart';
-import 'dart:convert';
-
-class GithubApiClientService {
-  final String datosJson = '''[
+[
     {
       "id": 1296269,
       "node_id": "MDEwOlJlcG9zaXRvcnkxMjk2MjY5",
@@ -109,61 +103,4 @@ class GithubApiClientService {
       },
       "template_repository": null
     }
-  ]''';
-  dynamic cuerpo;
-  final String urlApi = 'https://api.github.com';
-
-  List getRepositories() {
-    List nombreRepos = [];
-    // Response response = await get('$urlApi/users/$user/repos',
-    //     headers: {'User-Agent': 'request'});
-    cuerpo = jsonDecode(datosJson);
-    nombreRepos.add(cuerpo[0]['name']);
-    return nombreRepos;
-  }
-
-  List getLogin() {
-    List nombreRepos = [];
-    // Response response = await get('$urlApi/users/$user/repos',
-    //     headers: {'User-Agent': 'request'});
-    cuerpo = jsonDecode(datosJson);
-    nombreRepos.add(cuerpo[0]['owner']['login']);
-    return nombreRepos;
-  }
-
-  String getBody() {
-    return cuerpo;
-  }
-
-  String getRepos() {
-    String repositorios;
-    for (int i = 0; i < cuerpo.length; i++) {
-      // repositorios.add(cuerpo[i]['name']);
-    }
-    return cuerpo;
-  }
-}
-
-class RepoListController {
-  StreamController<List> controller;
-  List currentState = [];
-  RepoListController() {
-    controller = StreamController<List>.broadcast(
-      onListen: () {
-        controller.sink.add(currentState);
-      },
-    );
-  }
-
-  void test(List lista) {
-    controller.sink.add(currentState = lista);
-  }
-
-  void consulta() {}
-
-  Stream<List> get stream => controller.stream;
-
-  void dispose() {
-    controller.close();
-  }
-}
+  ]
